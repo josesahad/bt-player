@@ -1,5 +1,5 @@
-var BitTorrentClient = require('bittorrent-client')
-var http = require('http');
+var BitTorrentClient = require('webtorrent')
+var request = require('request');
 
 _client = new BitTorrentClient()
 
@@ -15,7 +15,7 @@ var client = {
     streamFile: function(torrent, fileName){
         return getFile(torrent, fileName)
     },
-    files: function(torrent){
+    getFiles: function(torrent){
         return getFiles(torrent)
     },
     search: function(keyword, res){
@@ -52,19 +52,28 @@ function getFile(torrent, fileName) {
 }
 
 function getFiles(torrent){
-    return torrent.files
+    var response = []
+
+    torrent.files.forEach(function (file) {
+        var jsonObject = {}
+
+        jsonObject.song = file.name
+        jsonObject.length = file.length
+
+        response.push(jsonObject)
+    });
+
+    return response
 }
 
 function searchTorrent(keyword, res){
     var url = 'http://fenopy.se/module/search/api.php?keyword=' + keyword  + '&category=1&format=json'
 
-    var request = require('request');
     request(url, function (error, response, body) {
         if (!error && response.statusCode == 200) {
             res.send(body)
         }
     })
 }
-
 
 module.exports = client

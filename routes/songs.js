@@ -7,12 +7,12 @@ exports.getSongs = function(req, res) {
         "Content-Type": "application/json"
     })
 
-//    var magnetUrl = 'magnet:?' + req.param('albumId')
+    var magnetUrl = 'magnet:?' + req.param('albumId')
 
 //    xt=urn:btih:83AA6E1A154F00098BD683B3C96B250EE366B881&dn=taylor+swift+1989+deluxe+mp3+2014&tr=udp%3A%2F%2Fcoppersurfer.tk%3A6969%2Fannounce&tr=udp%3A%2F%2Fopen.demonii.com%3A1337
-//    client.addMagnet(magnetUrl, function(torrent) {
-//        client.files(torrent).toString()
-//    })
+    client.addMagnet(magnetUrl, function(torrent) {
+        res.send(JSON.stringify(client.getFiles(torrent)))
+    })
 }
 
 exports.getSong = function(req, res) {
